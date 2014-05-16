@@ -28,6 +28,14 @@ module CodingTest
         DataAccess::all_tests
       end
 
+      params do
+        requires :id, type: String, desc: "Test name."
+        requires :data, type: String, desc: "Test data."
+      end
+      put ':id' do
+        DataAccess::insert_test JSON.parse(params[:data])
+      end
+
     end
 
   end

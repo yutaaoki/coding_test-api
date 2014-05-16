@@ -22,5 +22,9 @@ module CodingTest
       tests.find.to_a
     end
 
+    def insert_test(data)
+      tests.insert data
+    end
+
   end
 end
