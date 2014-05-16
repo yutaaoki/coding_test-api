@@ -22,8 +22,8 @@ module CodingTest
       tests.find.to_a
     end
 
-    def insert_test(data)
-      tests.insert data
+    def update_test(id, data)
+      tests.update({"_id" => id}, JSON.parse(data))
     end
 
   end

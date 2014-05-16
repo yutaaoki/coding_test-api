@@ -33,7 +33,7 @@ module CodingTest
         requires :data, type: String, desc: "Test data."
       end
       put ':id' do
-        DataAccess::insert_test JSON.parse(params[:data])
+        DataAccess::update_test params[:id], params[:data]
       end
 
     end
