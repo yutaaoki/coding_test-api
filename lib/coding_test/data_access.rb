@@ -23,7 +23,7 @@ module CodingTest
     end
 
     def update_test(id, data)
-      tests.update({"_id" => id}, JSON.parse(data))
+      tests.update({"_id" => id}, JSON.parse(data), :upsert => true)
     end
 
   end

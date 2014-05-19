@@ -20,8 +20,8 @@ describe CodingTest::API do
 
     describe "PUT test" do
       it "returns 200" do
-        data = {'name' => 'test-simple', 'introduction' => 'sample test', 'codes' => [1 => 'some code']}
-        put "tests/test-simple", {'data' => data.to_json}
+        data = {'name' => 'test_simple', 'introduction' => 'sample test', 'codes' => [1 => 'some code']}
+        put "tests/test_simple", {'data' => data.to_json}
         last_response.status.should == 200
       end
     end
