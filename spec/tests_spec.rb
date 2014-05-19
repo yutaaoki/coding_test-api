@@ -26,7 +26,7 @@ describe CodingTest::API do
     CodingTest::API
   end
 
-  describe "Expect 200 from" do
+  describe "Operation returing 200:" do
     it "GET tests" do
       get "tests"
       last_response.status.should == 200
@@ -46,7 +46,18 @@ describe CodingTest::API do
     end
   end
 
-  describe "tests scenarios" do
+  describe "Integrated operation" do
+    it "puts, gets, and verifies a test" do
+      name = 'spec_put_get'
+      data = {'name' => name, 'introduction' => 'Put your hands in the air!', 'codes' => [1 => 'some code']}
+      put "tests/#{name}", {'data' => data.to_json}
+      last_response.status.should == 200
+      get "tests/#{name}"
+      last_response.status.should == 200
+      puts last_response.body
+      res = JSON.parse(last_response.body)
+      expect(res['name']).to eq(name)
+    end
   end
   
 end

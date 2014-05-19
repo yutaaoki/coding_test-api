@@ -27,7 +27,7 @@ module CodingTest
     end
 
     def get_test(id)
-      tests.find_one({"name" => id}).to_a
+      tests.find_one({"name" => id})
     end
 
     def delete_test(id)
