@@ -12,3 +12,4 @@ coding-test2-api
 | GET sessions | Get the list of sessions |
 | POST sessions | Create a session |
 | DELETE sessions/:id | Delete a session |
+| PUT run/:id | Run test |
