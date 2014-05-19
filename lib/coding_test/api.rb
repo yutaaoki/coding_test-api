@@ -36,6 +36,14 @@ module CodingTest
         DataAccess::update_test params[:id], params[:data]
       end
 
+      get ':id' do
+        DataAccess::get_test params[:id]
+      end
+
+      delete ':id' do
+        DataAccess::delete_test params[:id]
+      end
+
     end
 
   end

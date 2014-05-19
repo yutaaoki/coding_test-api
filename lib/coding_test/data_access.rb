@@ -23,7 +23,15 @@ module CodingTest
     end
 
     def update_test(id, data)
-      tests.update({"_id" => id}, JSON.parse(data), :upsert => true)
+      tests.update({"name" => id}, JSON.parse(data), :upsert => true)
+    end
+
+    def get_test(id)
+      tests.find_one({"name" => id}).to_a
+    end
+
+    def delete_test(id)
+      tests.remove("name" => id)
     end
 
   end
