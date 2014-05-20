@@ -9,12 +9,14 @@ module CodingTest
       { "message" => "Welcome to CodingTest Api" }
     end
 
-    # Sessions
-    resource :sessions do
-      
+    add_authentication = 
       http_digest({realm: 'CodingTest Api', opaque: 'Soca tun up!' }) do |username, password|
         { 'test' => 'test' }[username]
       end
+
+    # Sessions
+    resource :sessions do
+      
 
       get do
         'Work on meh!'
@@ -23,6 +25,8 @@ module CodingTest
 
     # Tests
     resource :tests do
+
+      add_authentication
 
       get do
         DataAccess::all_tests

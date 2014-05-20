@@ -26,21 +26,46 @@ describe CodingTest::API do
     CodingTest::API
   end
 
+  def auth
+    digest_authorize 'test', 'test'
+  end
+
+  describe "Auth" do
+    it "without credentials" do
+      get "tests"
+      expect(last_response.status).to eq(401)
+    end
+    it "with bad credentials" do
+      digest_authorize 'bad', 'bad'
+      get 'tests'
+      expect(last_response.status).to eq(401)
+    end
+    it "with good credentials" do
+      auth
+      get "tests"
+      expect(last_response.status).to eq(200)
+    end
+  end
+
   describe "Operation returing 200:" do
     it "GET tests" do
+      auth
       get "tests"
       last_response.status.should == 200
     end
     it "GET tests/spec_empty" do
+      auth
       get 'tests/spec_empty'
       last_response.status.should == 200
     end
     it "PUT tests/spec_put_200" do
+      auth
       data = {'name' => 'spec_put_test', 'introduction' => 'sample test', 'codes' => [1 => 'some code']}
       put "tests/spec_put_200", {'data' => data.to_json}
       last_response.status.should == 200
     end
     it "DELETE tests/spec_empty"  do
+      auth
       delete 'tests/spec_empty'
       last_response.status.should == 200
     end
@@ -50,6 +75,7 @@ describe CodingTest::API do
     it "puts, gets, delets, and verifies a test" do
       name = 'spec_put_get'
       data = {'name' => name, 'introduction' => 'Put your hands in the air!', 'codes' => [1 => 'some code']}
+      auth
       #put
       put "tests/#{name}", {'data' => data.to_json}
       last_response.status.should == 200
@@ -64,7 +90,7 @@ describe CodingTest::API do
       #verify
       get "tests/#{name}"
       last_response.status.should == 200
-      expect(last_response.body).to eq(nil)
+      expect(last_response.body).to eq("null")
     end
   end
   
