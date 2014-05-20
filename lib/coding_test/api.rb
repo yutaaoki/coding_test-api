@@ -6,7 +6,7 @@ module CodingTest
     format :json
 
     get do
-      { "message" => "Welcome to CodingTest Api" }
+      { message: "Welcome to CodingTest Api" }
     end
 
     add_authentication = 
