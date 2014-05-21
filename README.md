@@ -12,4 +12,7 @@ coding-test2-api
 | GET sessions | Get the list of sessions |
 | POST sessions | Create a session |
 | DELETE sessions/:id | Delete a session |
-| PUT run/:id | Run test |
+| GET run/:id | Get test code. You need to start the timer first |
+| GET run/:id/instruction | Get instruction |
+| PUT run/:id/start | Start timer |
+| PUT run/:id | Update answers |
