@@ -34,5 +34,21 @@ module CodingTest
       tests.remove(name: id)
     end
 
+    def sessions
+      db['sessions']
+    end
+
+    def get_sessions
+      sessions.find.to_a
+    end
+
+    def insert_session(data)
+      sessions.insert(data)
+    end
+
+    def delete_session(id)
+      sessions.remove({_id: id})
+    end
+
   end
 end

@@ -17,9 +17,19 @@ module CodingTest
     # Sessions
     resource :sessions do
       
-
       get do
-        'Work on meh!'
+        DataAccess::get_sessions
+      end
+
+      params do
+        requires :data, type: String, desc: "Session Data"
+      end
+      post do
+        DataAccess::insert_session JSON.parse(params[:data])
+      end
+
+      delete ':id' do
+        DataAccess::delete_session params[:id]
       end
     end
 
