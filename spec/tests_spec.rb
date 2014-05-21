@@ -3,33 +3,11 @@ require './lib/coding_test/api'
 require 'rack/test'
 require 'json'
 require 'mongo'
+require_relative 'shared_context'
 
 describe CodingTest::API do
   include Rack::Test::Methods
-
-  def app
-    CodingTest::API
-  end
-
-  def auth
-    digest_authorize 'test', 'test'
-  end
-
-  Host = 'localhost'
-  DBName = 'coding_test'
-
-  client = Mongo::MongoClient.new(Host)
-  db = client.db(DBName)
-  tests = db['tests']
-
-  before(:all) do
-    tests.remove("name" => /spec.+/)
-  end
-  
-  after(:all) do
-    tests.remove("name" => /spec.+/)
-  end
-
+  include_context :api_test_context
 
   describe "Auth" do
     it "without credentials" do
