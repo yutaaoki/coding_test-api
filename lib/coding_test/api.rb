@@ -25,7 +25,10 @@ module CodingTest
         requires :data, type: String, desc: "Session Data"
       end
       post do
-        DataAccess::insert_session JSON.parse(params[:data])
+        data = JSON.parse(params[:data])
+        # add uuid
+        data['_id'] = SecureRandom.uuid
+        DataAccess::insert_session data
       end
 
       delete ':id' do

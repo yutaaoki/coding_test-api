@@ -15,13 +15,16 @@ shared_context :api_test_context do
   client = Mongo::MongoClient.new(Host)
   db = client.db(DBName)
   tests = db['tests']
+  sessions = db['sessions']
 
   before(:all) do
     tests.remove("name" => /spec.+/)
+    sessions.remove("name" => /spec.+/)
   end
   
   after(:all) do
     tests.remove("name" => /spec.+/)
+    sessions.remove("name" => /spec.+/)
   end
 
 end
