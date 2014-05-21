@@ -26,7 +26,7 @@ describe CodingTest::API do
     end
   end
 
-  describe "Operation returing 200:" do
+  describe "tests" do
     before(:each) do
       auth
     end
