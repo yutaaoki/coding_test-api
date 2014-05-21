@@ -1,29 +1,16 @@
-#require 'spec_helper'
 require './lib/coding_test/api'
 require 'rack/test'
 require 'json'
 require 'mongo'
 require_relative 'shared_context'
+require_relative 'shared_examples'
 
 describe CodingTest::API do
   include Rack::Test::Methods
   include_context :api_test_context
 
   describe "Auth" do
-    it "without credentials" do
-      get "tests"
-      expect(last_response.status).to eq(401)
-    end
-    it "with bad credentials" do
-      digest_authorize 'bad', 'bad'
-      get 'tests'
-      expect(last_response.status).to eq(401)
-    end
-    it "with good credentials" do
-      auth
-      get "tests"
-      expect(last_response.status).to eq(200)
-    end
+    include_examples :auth_tests, "tests"
   end
 
   describe "tests" do
