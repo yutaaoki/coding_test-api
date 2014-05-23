@@ -24,6 +24,17 @@ module CodingTest
           end
         end
 
+        put ':id' do
+          raw = DataAccess::get_session(params[:id]) || '{}'
+          data = JSON.parse(raw)
+          if data['started']
+            data.slice!(:started)
+          else
+            data['started'] = Time.now
+            DataAccess::update_session data['_id'], data
+            data.slice!(:started)
+          end
+        end
       end
     end
 

@@ -16,6 +16,12 @@ describe CodingTest::API do
       assert200
       assert_body('{}')
     end
+
+    it "PUT noexistent id" do
+      put "run/sessions/#{SecureRandom.uuid}"
+      assert200
+      expect(last_response.body).to match(/start.+/)
+    end
   end
 
 end

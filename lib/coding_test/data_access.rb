@@ -45,6 +45,10 @@ module CodingTest
     def get_session(id)
       sessions.find_one({_id: id})
     end
+    
+    def update_session(id, data)
+      sessions.update({_id: id}, data)
+    end
 
     def insert_session(data)
       sessions.insert(data)
