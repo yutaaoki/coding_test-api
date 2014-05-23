@@ -9,6 +9,13 @@ describe CodingTest::API do
   include Rack::Test::Methods
   include_context :api_test_context
 
+  def create_session
+      data = {name: 'spec_run_session_prepare', instruction: 'Put your hands in the air!', codes: [1 => 'some code']}
+      post "sessions", {data: data.to_json}
+      data = JSON.parse(last_response.body)
+      data["_id"]
+  end
+
   describe 'run/sessions' do
 
     it "GET nonexistent id" do
@@ -17,10 +24,28 @@ describe CodingTest::API do
       assert_body('{}')
     end
 
+    it "PUT and GET session" do
+      auth
+      id = create_session
+      assert201
+      get "run/sessions/#{id}"
+      assert200
+      assert_body_regex(/instruction/)
+    end
+
     it "PUT noexistent id" do
       put "run/sessions/#{SecureRandom.uuid}"
       assert200
-      expect(last_response.body).to match(/start.+/)
+      assert_body_regex /start/
+    end
+
+    it "PUT and run PUT session" do
+      auth
+      id = create_session
+      assert201
+      put "run/sessions/#{id}"
+      assert200
+      assert_body_regex /start/
     end
   end
 

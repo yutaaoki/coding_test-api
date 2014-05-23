@@ -15,8 +15,7 @@ module CodingTest
       resource :sessions do
 
         get ':id' do
-          raw = DataAccess::get_session(params[:id]) || '{}'
-          data = JSON.parse(raw)
+          data = DataAccess::get_session(params[:id]) || {}
           if data['started']
             data
           else
@@ -25,8 +24,7 @@ module CodingTest
         end
 
         put ':id' do
-          raw = DataAccess::get_session(params[:id]) || '{}'
-          data = JSON.parse(raw)
+          data = DataAccess::get_session(params[:id]) || {}
           if data['started']
             data.slice!(:started)
           else
@@ -57,6 +55,7 @@ module CodingTest
         # add uuid
         data['_id'] = SecureRandom.uuid
         DataAccess::insert_session data
+        data
       end
 
       delete ':id' do

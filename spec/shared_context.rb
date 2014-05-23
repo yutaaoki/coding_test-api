@@ -24,6 +24,10 @@ shared_context :api_test_context do
     expect(last_response.body).to eq(body)
   end
 
+  def assert_body_regex(reg)
+    expect(last_response.body).to match(reg)
+  end
+
   client = Mongo::MongoClient.new(Host)
   db = client.db(DBName)
   tests = db['tests']
