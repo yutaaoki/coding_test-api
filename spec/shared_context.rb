@@ -12,6 +12,18 @@ shared_context :api_test_context do
     digest_authorize Auth_User, Auth_Pass
   end
 
+  def assert200
+    expect(last_response.status).to eq(200)
+  end
+
+  def assert201
+    expect(last_response.status).to eq(201)
+  end
+
+  def assert_body(body)
+    expect(last_response.body).to eq(body)
+  end
+
   client = Mongo::MongoClient.new(Host)
   db = client.db(DBName)
   tests = db['tests']

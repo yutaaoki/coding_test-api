@@ -9,14 +9,31 @@ module CodingTest
       { message: "Welcome to CodingTest Api" }
     end
 
-    add_authentication = 
-      http_digest({realm: 'CodingTest Api', opaque: 'Soca tun up!' }) do |username, password|
-        { 'test' => 'test' }[username]
+    # Run
+    resource :run do
+
+      resource :sessions do
+
+        get ':id' do
+          raw = DataAccess::get_session(params[:id]) || '{}'
+          data = JSON.parse(raw)
+          if data['started']
+            data
+          else
+            data.slice!(:instruction)
+          end
+        end
+
       end
+    end
+
+    http_digest({realm: 'CodingTest Api', opaque: 'Soca tun up!' }) do |username, password|
+      { 'test' => 'test' }[username]
+    end
 
     # Sessions
     resource :sessions do
-      
+
       get do
         DataAccess::get_sessions
       end
@@ -39,8 +56,6 @@ module CodingTest
     # Tests
     resource :tests do
 
-      add_authentication
-
       get do
         DataAccess::all_tests
       end
@@ -60,7 +75,6 @@ module CodingTest
       delete ':id' do
         DataAccess::delete_test params[:id]
       end
-
     end
 
   end

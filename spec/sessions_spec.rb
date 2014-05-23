@@ -9,14 +9,6 @@ describe CodingTest::API do
   include Rack::Test::Methods
   include_context :api_test_context
 
-  def assert200
-    expect(last_response.status).to eq(200)
-  end
-
-  def assert201
-    expect(last_response.status).to eq(201)
-  end
-
   describe "Auth" do
     include_examples :auth_tests, "sessions"
   end
