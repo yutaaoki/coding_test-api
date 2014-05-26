@@ -20,11 +20,10 @@ describe CodingTest::API do
 
     it "GET nonexistent id" do
       get "sessions/#{SecureRandom.uuid}"
-      assert200
-      assert_body('{}')
+      assert_status(404)
     end
 
-    it "PUT and GET session" do
+    it "POST and GET session" do
       auth
       id = create_session
       assert201
@@ -33,19 +32,18 @@ describe CodingTest::API do
       assert_body_regex(/instruction/)
     end
 
-    it "PUT noexistent id" do
-      put "sessions/#{SecureRandom.uuid}"
-      assert200
-      assert_body_regex /start/
+    it "POST noexistent id" do
+      post "sessions/#{SecureRandom.uuid}"
+      assert_status(404)
     end
 
-    it "PUT and run PUT session" do
+    it "Create run POST session" do
       auth
       id = create_session
       assert201
-      put "sessions/#{id}"
-      assert200
-      assert_body_regex /start/
+      post  "sessions/#{id}"
+      assert201
+      assert_body_regex /Location/
     end
   end
 

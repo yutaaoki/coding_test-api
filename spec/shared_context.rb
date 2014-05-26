@@ -20,6 +20,10 @@ shared_context :api_test_context do
     expect(last_response.status).to eq(201)
   end
 
+  def assert_status(code)
+    expect(last_response.status).to eq(code)
+  end
+
   def assert_body(body)
     expect(last_response.body).to eq(body)
   end

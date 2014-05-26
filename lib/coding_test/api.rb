@@ -9,32 +9,41 @@ module CodingTest
       { message: "Welcome to CodingTest Api" }
     end
 
-    # Run
+    ##################
+    # Public
+    #################
 
     resource :sessions do
 
       get ':id' do
-        data = DataAccess::get_session(params[:id]) || {}
-        if data['started']
+        data = DataAccess::get_session(params[:id])
+        if data == nil
+          error! 'Session Not Exist', 404
+        elsif data['started']
           data
         else
           data.slice!(:instruction)
         end
       end
 
-      put ':id' do
-        data = DataAccess::get_session(params[:id]) || {}
-        if data['started']
-          data.slice!(:started)
+      post ':id' do
+        data = DataAccess::get_session(params[:id])
+        if data == nil
+          error! 'Session Not Exist', 404
+        elsif data['started']
+          error! 'Test Already Started', 405, 'Allow' => 'GET'
         else
-          data['started'] = Time.now
+          time = Time.now
+          data['started'] = time
           DataAccess::update_session data['_id'], data
-          data.slice!(:started)
+          {Location: "session/#{params[:id]}/#{time}"}
         end
       end
     end
 
-    # Restricted Area
+    ##################
+    # Restricted 
+    #################
     http_digest({realm: 'CodingTest Api', opaque: 'Soca tun up!' }) do |username, password|
       { 'test' => 'test' }[username]
     end
