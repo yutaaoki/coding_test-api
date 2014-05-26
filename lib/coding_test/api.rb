@@ -10,32 +10,31 @@ module CodingTest
     end
 
     # Run
-    resource :run do
 
-      resource :sessions do
+    resource :sessions do
 
-        get ':id' do
-          data = DataAccess::get_session(params[:id]) || {}
-          if data['started']
-            data
-          else
-            data.slice!(:instruction)
-          end
+      get ':id' do
+        data = DataAccess::get_session(params[:id]) || {}
+        if data['started']
+          data
+        else
+          data.slice!(:instruction)
         end
+      end
 
-        put ':id' do
-          data = DataAccess::get_session(params[:id]) || {}
-          if data['started']
-            data.slice!(:started)
-          else
-            data['started'] = Time.now
-            DataAccess::update_session data['_id'], data
-            data.slice!(:started)
-          end
+      put ':id' do
+        data = DataAccess::get_session(params[:id]) || {}
+        if data['started']
+          data.slice!(:started)
+        else
+          data['started'] = Time.now
+          DataAccess::update_session data['_id'], data
+          data.slice!(:started)
         end
       end
     end
 
+    # Restricted Area
     http_digest({realm: 'CodingTest Api', opaque: 'Soca tun up!' }) do |username, password|
       { 'test' => 'test' }[username]
     end
