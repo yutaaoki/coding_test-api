@@ -32,10 +32,23 @@ shared_context :api_test_context do
     expect(last_response.body).to match(reg)
   end
 
-  client = Mongo::MongoClient.new(Host)
-  db = client.db(DBName)
-  tests = db['tests']
-  sessions = db['sessions']
+  #client = Mongo::MongoClient.new(Host)
+  #db = client.db(DBName)
+  #tests = db['tests']
+  #sessions = db['sessions']
+  
+  def db
+    client = Mongo::MongoClient.new(Host)
+    db = client.db(DBName)
+  end
+
+  def tests
+    db['tests']
+  end
+
+  def sessions
+    db['sessions']
+  end
 
   before(:all) do
     tests.remove("name" => /spec.+/)

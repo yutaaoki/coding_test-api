@@ -5,6 +5,7 @@ module CodingTest
   class API < Grape::API
     format :json
 
+
     get do
       { message: "Welcome to CodingTest Api" }
     end
@@ -33,10 +34,21 @@ module CodingTest
         elsif data['started']
           error! 'Test Already Started', 405, 'Allow' => 'GET'
         else
-          time = Time.now
+          time = Time.now.to_i
           data['started'] = time
           DataAccess::update_session data['_id'], data
-          {Location: "session/#{params[:id]}/#{time}"}
+          {location: "sessions/#{params[:id]}/#{time}"}
+        end
+      end
+
+      get ':id/:time' do
+        data = DataAccess::get_session(params[:id])
+        if data == nil
+          error! 'Session Not Exist', 404
+        elsif data['started']  == params['time'].to_i
+          data
+        else
+          error! 'Wrong Time Param', 404
         end
       end
     end

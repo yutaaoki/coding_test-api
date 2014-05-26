@@ -37,13 +37,27 @@ describe CodingTest::API do
       assert_status(404)
     end
 
-    it "Create run POST session" do
+    it "Create, POST, GET session" do
       auth
       id = create_session
       assert201
       post  "sessions/#{id}"
       assert201
-      assert_body_regex /Location/
+      assert_body_regex /location/
+      data = JSON.parse(last_response.body)
+      get data['location']
+      puts sessions.find.to_a
+      assert200
+      assert_body_regex /started/
+    end
+
+    it "POST twice" do
+      auth
+      id = create_session
+      post  "sessions/#{id}"
+      assert201
+      post  "sessions/#{id}"
+      assert_status 405
     end
   end
 
