@@ -10,6 +10,7 @@ describe CodingTest::API do
   include_context :api_test_context
 
   def create_session
+      auth
       data = {name: 'spec_run_session_prepare', instruction: 'Put your hands in the air!', codes: [1 => 'some code']}
       post "sessions", {data: data.to_json}
       data = JSON.parse(last_response.body)
@@ -33,15 +34,13 @@ describe CodingTest::API do
 
     describe 'sessions' do
       it "GETs" do
-        auth
         id = create_session
         assert201
         get "sessions/#{id}"
         assert200
         assert_body_regex(/instruction/)
       end
-      it "POSTs twice" do
-        auth
+      it "POSTs twice (already started)" do
         id = create_session
         post  "sessions/#{id}"
         assert201
@@ -56,23 +55,38 @@ describe CodingTest::API do
 
     describe ':id/time' do
       it "GETs" do
-        auth
         id = create_session
-        location = start_session(id)
-        get location
+        start_session(id)
+        get "sessions/#{id}/time"
         assert200
-        assert_body_regex /started/
+        assert_body_regex /remaining/
       end
-
+      it 'GETs nonexistent session' do
+        get "sessions/blablabla/time"
+        assert_status(404)
+      end
+      it 'GETs Session Not Started' do
+        id = create_session
+        get "sessions/#{id}/time"
+        assert_status(404)
+      end
     end
 
     describe ':id/content' do
       it 'GETs content' do
-        auth
         id = create_session
         location = start_session(id)
         get "sessions/#{id}/content"
         assert_body_regex /instruction/
+      end
+      it 'GETs nonexistent session' do
+        get "sessions/blablabla/content"
+        assert_status(404)
+      end
+      it 'GETs Session Not Started' do
+        id = create_session
+        get "sessions/#{id}/content"
+        assert_status(404)
       end
     end
 

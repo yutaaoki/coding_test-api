@@ -45,12 +45,12 @@ module CodingTest
         data = DataAccess::get_session(params[:id])
         if data == nil
           error! 'Session Not Exist', 404
-        elsif data['started']  == params['time'].to_i
-          time = Time.new(params['time'].to_i)
+        elsif data['started']
+          time = Time.new(data['started'].to_i)
           dif = Time.now - time
           {remaining: dif/60}
         else
-          error! 'Wrong Time Param', 404
+          error! 'Session Not Started', 404
         end
       end
 

@@ -37,7 +37,7 @@ describe CodingTest::API do
 
   end
 
-  describe "Scenario" do
+  describe "scenario" do
 
     before(:each) do
       auth
