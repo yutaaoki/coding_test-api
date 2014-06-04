@@ -31,36 +31,39 @@ describe CodingTest::API do
       assert_status(404)
     end
 
-    it "POST and GET session" do
-      auth
-      id = create_session
-      assert201
-      get "sessions/#{id}"
-      assert200
-      assert_body_regex(/instruction/)
+    describe 'sessions' do
+      it "GETs" do
+        auth
+        id = create_session
+        assert201
+        get "sessions/#{id}"
+        assert200
+        assert_body_regex(/instruction/)
+      end
+      it "POSTs twice" do
+        auth
+        id = create_session
+        post  "sessions/#{id}"
+        assert201
+        post  "sessions/#{id}"
+        assert_status 405
+      end
+      it "POSTs noexistent id" do
+        post "sessions/#{SecureRandom.uuid}"
+        assert_status(404)
+      end
     end
 
-    it "POST noexistent id" do
-      post "sessions/#{SecureRandom.uuid}"
-      assert_status(404)
-    end
+    describe ':id/time' do
+      it "GETs" do
+        auth
+        id = create_session
+        location = start_session(id)
+        get location
+        assert200
+        assert_body_regex /started/
+      end
 
-    it "Create, POST, GET session" do
-      auth
-      id = create_session
-      location = start_session(id)
-      get location
-      assert200
-      assert_body_regex /started/
-    end
-
-    it "POST twice" do
-      auth
-      id = create_session
-      post  "sessions/#{id}"
-      assert201
-      post  "sessions/#{id}"
-      assert_status 405
     end
 
     describe ':id/content' do

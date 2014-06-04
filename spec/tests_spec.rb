@@ -17,26 +17,26 @@ describe CodingTest::API do
     before(:each) do
       auth
     end
-    it "GET tests" do
+    it "GETs tests" do
       get "tests"
       expect(last_response.status).to eq(200)
     end
-    it "GET tests/spec_empty" do
+    it "GETs tests/spec_empty" do
       get 'tests/spec_empty'
       expect(last_response.status).to eq(200)
     end
-    it "PUT tests/spec_put_200" do
+    it "PUTs tests/spec_put_200" do
       data = {'name' => 'spec_put_test', 'introduction' => 'sample test', 'codes' => [1 => 'some code']}
       put "tests/spec_put_200", {'data' => data.to_json}
       expect(last_response.status).to eq(200)
     end
-    it "DELETE tests/spec_empty"  do
+    it "DELETEs tests/spec_empty"  do
       delete 'tests/spec_empty'
       expect(last_response.status).to eq(200)
     end
   end
 
-  describe "Integrated operation" do
+  describe "scenario" do
     before(:each) do
       auth
     end

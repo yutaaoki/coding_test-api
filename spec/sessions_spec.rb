@@ -19,18 +19,18 @@ describe CodingTest::API do
       auth
     end
 
-    it "GET sessions" do
+    it "GETs sessions" do
       get "sessions"
       assert200
     end
 
-    it "POST sessions" do
+    it "POSTs sessions" do
       data = {name: 'spec_session_put', introduction: 'Put your hands in the air!', codes: [1 => 'some code']}
       post "sessions", {data: data.to_json}
       assert201
     end
 
-    it "DELETE sessions" do
+    it "DELETEs sessions" do
       delete "sessions/spec_sessions"
       assert200
     end
