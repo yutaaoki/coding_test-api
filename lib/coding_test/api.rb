@@ -54,6 +54,18 @@ module CodingTest
         end
       end
 
+      put ':id/time' do
+        data = DataAccess::get_session(params[:id])
+        if data == nil
+          error! 'Session Not Exist', 404
+        elsif data['started']
+          data['finished'] = 'true'
+          DataAccess::update_session data['_id'], data
+        else
+          error! 'Session Not Started', 404
+        end
+      end
+
       get ':id/content' do
         data = DataAccess::get_session(params[:id])
         if data == nil

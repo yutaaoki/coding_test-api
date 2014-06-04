@@ -70,6 +70,12 @@ describe CodingTest::API do
         get "sessions/#{id}/time"
         assert_status(404)
       end
+      it 'PUTs' do
+        id = create_session
+        start_session(id)
+        put "sessions/#{id}/time"
+        assert200
+      end
     end
 
     describe ':id/content' do
