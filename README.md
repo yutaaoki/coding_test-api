@@ -22,7 +22,7 @@ coding-test2-api
 | GET sessions/:id | Get a session. |
 | POST sessions/:id | Start a session |
 | GET sessions/:id/content | Get the test code |
-| GET sessions/:id/:time | Get the remaining time |
-| PUT sessions/:id/:time | Finish a session |
+| GET sessions/:id/time | Get the remaining time |
+| PUT sessions/:id/time | Finish the session |
 | PUT answers/:id | Update answers. Put an empty answer to start a test. |
 | GET answers/:id | Get an answer. |
