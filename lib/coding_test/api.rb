@@ -37,18 +37,31 @@ module CodingTest
           time = Time.now.to_i
           data['started'] = time
           DataAccess::update_session data['_id'], data
-          {location: "sessions/#{params[:id]}/#{time}"}
+          {location: "sessions/#{params[:id]}/content"}
         end
       end
 
-      get ':id/:time' do
+      get ':id/time' do
         data = DataAccess::get_session(params[:id])
         if data == nil
           error! 'Session Not Exist', 404
         elsif data['started']  == params['time'].to_i
-          data
+          time = Time.new(params['time'].to_i)
+          dif = Time.now - time
+          {remaining: dif/60}
         else
           error! 'Wrong Time Param', 404
+        end
+      end
+
+      get ':id/content' do
+        data = DataAccess::get_session(params[:id])
+        if data == nil
+          error! 'Session Not Exist', 404
+        elsif data['started']
+          data
+        else
+          error! 'Session Not Started', 404
         end
       end
     end

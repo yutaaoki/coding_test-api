@@ -16,6 +16,14 @@ describe CodingTest::API do
       data["_id"]
   end
 
+  def start_session(id)
+      post  "sessions/#{id}"
+      assert201
+      assert_body_regex /location/
+      data = JSON.parse(last_response.body)
+      data['location']
+  end
+
   describe 'sessions' do
 
     it "GET nonexistent id" do
@@ -40,13 +48,8 @@ describe CodingTest::API do
     it "Create, POST, GET session" do
       auth
       id = create_session
-      assert201
-      post  "sessions/#{id}"
-      assert201
-      assert_body_regex /location/
-      data = JSON.parse(last_response.body)
-      get data['location']
-      puts sessions.find.to_a
+      location = start_session(id)
+      get location
       assert200
       assert_body_regex /started/
     end
@@ -59,6 +62,17 @@ describe CodingTest::API do
       post  "sessions/#{id}"
       assert_status 405
     end
+
+    describe ':id/content' do
+      it 'GETs content' do
+        auth
+        id = create_session
+        location = start_session(id)
+        get "sessions/#{id}/content"
+        assert_body_regex /instruction/
+      end
+    end
+
   end
 
 end
