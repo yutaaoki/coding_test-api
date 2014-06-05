@@ -6,7 +6,6 @@ module CodingTest
     format :json
     helpers DataAccess
 
-
     get do
       { message: "Welcome to CodingTest Api" }
     end
@@ -35,7 +34,7 @@ module CodingTest
         elsif data['started']
           error! 'Test Already Started', 405, 'Allow' => 'GET'
         elsif data['finished']
-          error! 'Session Already Finished', 404
+          error! 'Session Already Finished', 405
         else
           time = Time.now.to_i
           data['started'] = time
@@ -50,7 +49,7 @@ module CodingTest
           if data == nil
             error! 'Session Not Exist', 404
           elsif data['finished']
-            error! 'Session Already Finished', 404
+            error! 'Session Already Finished', 405
           elsif data['started']
             yield data
           else
@@ -78,6 +77,29 @@ module CodingTest
           data['finished'] = 'true'
           update_session data['_id'], data
         end
+      end
+    end
+
+    resource :answers do
+
+      get ':session_id' do
+        data = get_answer(params[:session_id])
+        if data == nil
+            error! 'Answer Not Exist', 404
+        else
+          data
+        end
+      end
+
+      params do
+        requires :data, type: String, desc: "Answer data."
+      end
+      put ':session_id' do
+          session_data = get_session(params[:id])
+          if session_data['finished']
+            error! 'Session Already Finished', 405
+          end
+          update_answer params[:session_id], params[:data]
       end
 
     end
@@ -120,7 +142,6 @@ module CodingTest
       end
 
       params do
-        requires :id, type: String, desc: "Test name."
         requires :data, type: String, desc: "Test data."
       end
       put ':id' do

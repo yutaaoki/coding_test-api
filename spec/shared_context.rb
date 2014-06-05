@@ -32,10 +32,21 @@ shared_context :api_test_context do
     expect(last_response.body).to match(reg)
   end
 
-  #client = Mongo::MongoClient.new(Host)
-  #db = client.db(DBName)
-  #tests = db['tests']
-  #sessions = db['sessions']
+  def create_session
+      auth
+      data = {name: 'spec_run_session_prepare', instruction: 'Put your hands in the air!', codes: [1 => 'some code']}
+      post "sessions", {data: data.to_json}
+      data = JSON.parse(last_response.body)
+      data["_id"]
+  end
+
+  def start_session(id)
+      post  "sessions/#{id}"
+      assert201
+      assert_body_regex /location/
+      data = JSON.parse(last_response.body)
+      data['location']
+  end
   
   def db
     client = Mongo::MongoClient.new(Host)

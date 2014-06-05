@@ -30,6 +30,6 @@ shared_examples :session_errors do |path|
     start_session(id)
     put "sessions/#{id}/time"
     get "sessions/#{id}/#{path}"
-    assert_status(404)
+    assert_status(405)
   end
 end

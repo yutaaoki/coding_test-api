@@ -58,5 +58,17 @@ module CodingTest
       sessions.remove({_id: id})
     end
 
+    def answers
+      db['answers']
+    end
+
+    def get_answer(session_id)
+      answers.find_one({session_id: session_id})
+    end
+
+    def update_answer(session_id, data)
+      tests.update({session_id: session_id}, JSON.parse(data), :upsert => true)
+    end
+
   end
 end
