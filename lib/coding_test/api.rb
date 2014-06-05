@@ -34,6 +34,8 @@ module CodingTest
           error! 'Session Not Exist', 404
         elsif data['started']
           error! 'Test Already Started', 405, 'Allow' => 'GET'
+        elsif data['finished']
+          error! 'Session Already Finished', 404
         else
           time = Time.now.to_i
           data['started'] = time
@@ -47,10 +49,10 @@ module CodingTest
           data = get_session(params[:id])
           if data == nil
             error! 'Session Not Exist', 404
-          elsif data['started']
-            yield data
           elsif data['finished']
             error! 'Session Already Finished', 404
+          elsif data['started']
+            yield data
           else
             error! 'Session Not Started', 404
           end

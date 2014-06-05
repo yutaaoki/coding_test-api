@@ -54,21 +54,13 @@ describe CodingTest::API do
     end
 
     describe ':id/time' do
+      include_examples :session_errors, "time"
       it "GETs" do
         id = create_session
         start_session(id)
         get "sessions/#{id}/time"
         assert200
         assert_body_regex /remaining/
-      end
-      it 'GETs nonexistent session' do
-        get "sessions/blablabla/time"
-        assert_status(404)
-      end
-      it 'GETs Session Not Started' do
-        id = create_session
-        get "sessions/#{id}/time"
-        assert_status(404)
       end
       it 'PUTs' do
         id = create_session
@@ -79,20 +71,12 @@ describe CodingTest::API do
     end
 
     describe ':id/content' do
+      include_examples :session_errors, "content"
       it 'GETs content' do
         id = create_session
         location = start_session(id)
         get "sessions/#{id}/content"
         assert_body_regex /instruction/
-      end
-      it 'GETs nonexistent session' do
-        get "sessions/blablabla/content"
-        assert_status(404)
-      end
-      it 'GETs Session Not Started' do
-        id = create_session
-        get "sessions/#{id}/content"
-        assert_status(404)
       end
     end
 
