@@ -95,11 +95,14 @@ module CodingTest
         requires :data, type: String, desc: "Answer data."
       end
       put ':session_id' do
-          session_data = get_session(params[:id])
-          if session_data['finished']
+          session_data = get_session(params[:session_id])
+          if session_data == nil
+              error! 'Answer Not Exist', 404
+          elsif session_data['finished']
             error! 'Session Already Finished', 405
+          else
+            update_answer params[:session_id], params[:data]
           end
-          update_answer params[:session_id], params[:data]
       end
 
     end

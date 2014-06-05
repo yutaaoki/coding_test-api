@@ -36,6 +36,7 @@ shared_context :api_test_context do
       auth
       data = {name: 'spec_run_session_prepare', instruction: 'Put your hands in the air!', codes: [1 => 'some code']}
       post "sessions", {data: data.to_json}
+      assert201
       data = JSON.parse(last_response.body)
       data["_id"]
   end

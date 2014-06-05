@@ -27,7 +27,7 @@ describe CodingTest::API do
     end
     it "PUTs tests/spec_put_200" do
       data = {'name' => 'spec_put_test', 'introduction' => 'sample test', 'codes' => [1 => 'some code']}
-      put "tests/spec_put_200", {'data' => data.to_json}
+      put "tests/spec_put_200", {data: data.to_json}
       expect(last_response.status).to eq(200)
     end
     it "DELETEs tests/spec_empty"  do

@@ -67,7 +67,7 @@ module CodingTest
     end
 
     def update_answer(session_id, data)
-      tests.update({session_id: session_id}, JSON.parse(data), :upsert => true)
+      answers.update({session_id: session_id}, JSON.parse(data), :upsert => true)
     end
 
   end
