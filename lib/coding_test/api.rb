@@ -59,6 +59,12 @@ module CodingTest
         end
       end
 
+      get ':id/content' do
+        if_started do |data|
+          data
+        end
+      end
+
       get ':id/time' do
         if_started do |data|
           time = Time.new(data['started'].to_i)
@@ -74,11 +80,6 @@ module CodingTest
         end
       end
 
-      get ':id/content' do
-        if_started do |data|
-          data
-        end
-      end
     end
 
     ##################
