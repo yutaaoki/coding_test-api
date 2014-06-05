@@ -24,5 +24,5 @@ coding-test2-api
 | GET sessions/:id/content | Get the test code |
 | GET sessions/:id/time | Get the remaining time |
 | PUT sessions/:id/time | Finish the session |
-| PUT answers/:id | Update answers. Put an empty answer to start a test. |
-| GET answers/:id | Get an answer. |
+| GET answers/:session_id | Get an answer. |
+| PUT answers/:session_id | Update answers. Put an empty answer to start a test. |
