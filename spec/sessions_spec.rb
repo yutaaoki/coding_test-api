@@ -19,48 +19,47 @@ describe CodingTest::API do
       auth
     end
 
-    it "GETs sessions" do
-      get "sessions"
-      assert200
+    describe 'GET' do
+      it "returns 200" do
+        get "sessions"
+        assert200
+      end
     end
 
-    it "POSTs sessions" do
-      data = {name: 'spec_session_put', introduction: 'Put your hands in the air!', codes: [1 => 'some code']}
-      post "sessions", {data: data.to_json}
-      assert201
+    describe 'POST' do
+      it "returns 201" do
+        data = {name: 'spec_session_put', introduction: 'Put your hands in the air!', codes: [1 => 'some code']}
+        post "sessions", {data: data.to_json}
+        assert201
+      end
     end
 
-    it "DELETEs sessions" do
-      delete "sessions/spec_sessions"
-      assert200
+    describe 'DELETE' do
+      it "returns 200" do
+        delete "sessions/spec_sessions"
+        assert200
+      end
     end
 
+    context "when posts and deletes session" do
+      it "returns an empty array" do
+        name = 'spec_post_scenario'
+        data = {name: name, introduction: 'Put your hands in the air!', codes: [1 => 'some code']}
+        post "sessions", {data: data.to_json}
+        assert201
+        get "sessions"
+        result = JSON.parse(last_response.body)
+        id_node = result.select { |node| node["name"] == name}
+        id = id_node[0]["_id"]
+        #delete
+        delete "sessions/#{id}"
+        assert200
+        #verify
+        get "sessions"
+        result2 = JSON.parse(last_response.body)
+        empty = result2.select { |node| node["name"] == name}
+        expect(empty).to eq([])
+      end
+    end
   end
-
-  describe "scenario" do
-
-    before(:each) do
-      auth
-    end
-
-    it "posts and deletes" do
-      name = 'spec_post_scenario'
-      data = {name: name, introduction: 'Put your hands in the air!', codes: [1 => 'some code']}
-      post "sessions", {data: data.to_json}
-      assert201
-      get "sessions"
-      result = JSON.parse(last_response.body)
-      id_node = result.select { |node| node["name"] == name}
-      id = id_node[0]["_id"]
-      #delete
-      delete "sessions/#{id}"
-      assert200
-      #verify
-      get "sessions"
-      result2 = JSON.parse(last_response.body)
-      empty = result2.select { |node| node["name"] == name}
-      expect(empty).to eq([])
-    end
-  end
-
 end

@@ -11,59 +11,77 @@ describe CodingTest::API do
 
   describe 'sessions' do
 
-    it "GET nonexistent id" do
-      get "sessions/#{SecureRandom.uuid}"
-      assert_status(404)
+    context "when not exist" do
+      it "returns 404" do
+        get "sessions/#{SecureRandom.uuid}"
+        assert_status(404)
+      end
     end
 
     describe 'sessions' do
-      it "GETs" do
-        id = create_session
-        assert201
-        get "sessions/#{id}"
-        assert200
-        assert_body_regex(/instruction/)
+
+      describe 'GET' do
+        it "returns data" do
+          id = create_session
+          assert201
+          get "sessions/#{id}"
+          assert200
+          assert_body_regex(/instruction/)
+        end
       end
-      it "POSTs twice (already started)" do
-        id = create_session
-        post  "sessions/#{id}"
-        assert201
-        post  "sessions/#{id}"
-        assert_status 405
-      end
-      it "POSTs noexistent id" do
-        post "sessions/#{SecureRandom.uuid}"
-        assert_status(404)
+
+      describe 'POST' do
+
+        context "when already started" do
+          it "returns 405" do
+            id = create_session
+            post  "sessions/#{id}"
+            assert201
+            post  "sessions/#{id}"
+            assert_status 405
+          end
+        end
+
+        context "when not exist" do
+          it "returns 404" do
+            post "sessions/#{SecureRandom.uuid}"
+            assert_status(404)
+          end
+        end
       end
     end
 
     describe ':id/time' do
       include_examples :session_errors, "time"
-      it "GETs" do
-        id = create_session
-        start_session(id)
-        get "sessions/#{id}/time"
-        assert200
-        assert_body_regex /remaining/
+
+      describe "GET" do
+        it "returns remaining time" do
+          id = create_session
+          start_session(id)
+          get "sessions/#{id}/time"
+          assert200
+          assert_body_regex /remaining/
+        end
       end
-      it 'PUTs' do
-        id = create_session
-        start_session(id)
-        put "sessions/#{id}/time"
-        assert200
+
+      describe 'PUT' do
+        it 'returns 200' do
+          id = create_session
+          start_session(id)
+          put "sessions/#{id}/time"
+          assert200
+        end
       end
     end
 
     describe ':id/content' do
       include_examples :session_errors, "content"
-      it 'GETs content' do
+      it 'returns data' do
         id = create_session
         location = start_session(id)
         get "sessions/#{id}/content"
         assert_body_regex /instruction/
       end
     end
-
   end
-
 end
