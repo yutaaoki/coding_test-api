@@ -1,4 +1,4 @@
-require './lib/coding_test/api'
+require './app/coding_test/api'
 require 'rack/test'
 require 'json'
 require 'mongo'

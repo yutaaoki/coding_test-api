@@ -1,3 +1,3 @@
-require './lib/coding_test/api'
+require './app/coding_test/api'
 
 run CodingTest::API
